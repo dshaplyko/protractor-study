@@ -2,7 +2,7 @@
 exports.config = {
   seleniumAddress: 'http://localhost:4444/wd/hub',
   allScriptsTimeout: 11000,
-  specs: ['spec.js'],
+  specs: ['./specs/*-spec.js'],
   capabilities: {
     'browserName': 'chrome'
   },
@@ -10,5 +10,10 @@ exports.config = {
   onPrepare: function() {
     browser.driver.manage().window().setSize(1280, 720);
     browser.manage().timeouts().implicitlyWait(5000);
-  }
+  },
+
+  jasmineNodeOpts: {
+        showColors: true
+    }
+
 }
