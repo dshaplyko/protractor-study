@@ -1,36 +1,65 @@
 // spec.js
-describe('angularjs homepage', function() {
-  var firstNumber = element(by.model('first'));
-  var secondNumber = element(by.model('second'));
-  var goButton = element(by.id('gobutton'));
-  var latestResult = element(by.binding('latest'));
+describe('J2GA application', function() {
+  var baseUrl = 'http://bmb-dev-weu-wkde-master.azurewebsites.net/?lg'
+  var loginField = element(by.name('userName'));
+  var passwordField = element(by.name('password'));
+  var loginButton = element(by.css("button[type='submit']"));
+  var alertMessage = element(by.css('.wk-alert-danger'));
+  var searchBar = element(by.css('li input.tags-input-text'));
+
   var history = element.all(by.repeater('result in memory'));
   
-  function add(a,b) {
-    firstNumber.sendKeys(a);
-    secondNumber.sendKeys(b);
-    goButton.click();
+  function login(login, password) {
+    loginField.sendKeys(login);
+    passwordField.sendKeys(password);
+    loginButton.click();
   }
-  
+
   beforeEach(function() {
-    browser.get('http://juliemr.github.io/protractor-demo/');
+    browser.get(baseUrl);
   });
   
-  it('should have a history', function() {
-    add(1,2);
-    add(3,4);
-    
-    expect(history.count()).toEqual(2);
-    
-    add(5,6);
-    
-    expect(history.count()).toEqual(3);
-    
-    expect(history.last().getText()).toContain('1 + 2');
-    expect(history.first().getText()).toContain('5 + 6');
+  it('Login page should contain needed elements', function() {
+    expect(loginField.isPresent()).toBe(true);
+    expect(passwordField.isPresent()).toBe(true);
+    expect(loginButton.isPresent()).toBe(true);
   });
+
+  it('Should not allow to login using non-valid credentials', function() {
+    loginField.sendKeys('aaa');
+    passwordField.sendKeys('bbb');
+    loginButton.click();
+    expect(alertMessage.isPresent()).toBe(true);
+  });
+
+  it('Should login using valid credentials', function() {
+    loginField.sendKeys('wkdefull19@wk.com');
+    passwordField.sendKeys('password');
+    loginButton.click();
+    //Here we are waiting for the URL to be changed
+    browser.wait(function() {
+            return browser.getCurrentUrl().then(function(url) {
+                return (url.indexOf(baseUrl + '#/bibliothek') !== -1);
+            });
+        });
+  });
+
+  it('Home page should contain needed values', function() {
+    expect(searchBar.isPresent()).toBe(true);
+    expect(searchBar.getAttribute('placeholder')).toEqual('Suchen Sie nach Begriffen, Aktenzeichen, Vorschriften, Gerichten, etc. ...')
+  });
+
+
+
+
+
+
+
+
+
+
   
-  it('should have a title', function() {
+  /*it('should have a title', function() {
     expect(browser.getTitle()).toEqual('Super Calculator');
   });
 
@@ -48,5 +77,6 @@ describe('angularjs homepage', function() {
     secondNumber.sendKeys('6');
     goButton.click();
     expect(latestResult.getText()).toEqual('10');
-  });
+  });*/
+
 });
