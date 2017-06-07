@@ -60,7 +60,7 @@ describe('J2GA application', function() {
     expect(logoutButton.isPresent()).toBe(true);
   });
 
-  it('should logout the user', function() {
+  it('Should logout the user', function() {
     logoutButton.click();
      browser.wait(function() {
             return browser.getCurrentUrl().then(function(url) {
