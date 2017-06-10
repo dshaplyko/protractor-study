@@ -42,7 +42,7 @@ describe('J2GA application', function() {
   });
 
   it('Should login using valid credentials', function() {
-    loginField.sendKeys('wkdefull19@wk.com');
+    loginField.sendKeys('wkdefull16@wk.com');
     passwordField.sendKeys('password');
     loginButton.click();
     //Here we are waiting for the URL to be changed
